@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 
 
 const init = () => {
-    return inquire.prompt([
+    return inquirer.prompt([
         {
             type: 'list',
             name: 'application',
@@ -29,14 +29,41 @@ const init = () => {
         } else if (response.application == 'add a role') {
             console.log('add a role')
         } else if (response.application == 'add an employee') {
-            console.log('add an employee')
+            addEmployee();
         } else {
             console.log('update an employee role')
         };
     })
 }
-    
 
+const addEmployee = () => {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'fist_name',
+            message: 'What is the employees first name?'
+        },{
+            type: 'input',
+            name: 'last_name',
+            message: 'What is the employees last name?'
+        },{
+            type: 'list',
+            name: 'role',
+            message: 'What is the employees role?',
+            choices: [
+                'Sales Lead', 
+                'Salesperson',
+                'Lead Engineer',
+                'Software Engineer',
+                'Accountant', 
+                'Legal Team Lead',
+                'Lawer'
+            ]
+        }
+    ])
+}
+    
+init();
 // GIVEN a command-line application that accepts user input
 // WHEN I start the application
 // THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
