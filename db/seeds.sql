@@ -19,17 +19,7 @@ VALUES
 ('Lawer', 120000, 4)
 ;
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES 
-("John", "Doe", 8, null), 
-("Mike", "Chan", 9, null), 
-("Ashley", "Rodriguez", 2, null), 
-("Kevin", "Tupik", 11, null),
-("Malia", "Brown", 12, null),
-("Sarah", "Lourd", 13, null), 
-("Tom", "Allen", 14, null),
-("Christian", "Eckenrode", 10, null)
-;
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("John", "Doe", 8, null), ("Mike", "Chan", 9, null), ("Ashley", "Rodriguez", 2, null), ("Kevin", "Tupik", 11, null), ("Malia", "Brown", 12, null), ("Sarah", "Lourd", 13, null), ("Tom", "Allen", 14, null), ("Christian", "Eckenrode", 10, null);
 
 -- UPDATE employee SET role_id = role_id WHERE condition;
 -- department table 
