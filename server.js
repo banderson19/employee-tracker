@@ -21,8 +21,8 @@ const db = mysql.createConnection(
     console.log('Connected to the election database.')
     );
 
-app.get('/api/tracker/departments', (req, res) => {
-    const sql = `SELECT * FROM tracker.departments`;
+app.get('/api/tracker/employee', (req, res) => {
+    const sql = `SELECT * FROM tracker.employee`;
     db.query(sql, (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
