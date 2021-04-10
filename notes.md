@@ -1,6 +1,13 @@
 * got all tables created and able to select * from tables;
 * add to tables
 
+** need to fix sort by role to by department
+* select all columns where department id = 2;
+SELECT * FROM ((employee INNER JOIN role ON employee.role_id = role.id) INNER JOIN department ON role.department_id = department.id) WHERE department.id = 2;
+
+* Select all columns 
+SELECT * FROM ((employee INNER JOIN role ON employee.role_id = role.id) INNER JOIN department ON role.department_id = department.id);
+
 GIVEN a command-line application that accepts user input
 WHEN I start the application
 THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role

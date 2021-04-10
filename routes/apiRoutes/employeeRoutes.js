@@ -6,7 +6,14 @@ const db = require('../../db/connection');
 // Get list of all employees
 router.get('/tracker/employee', (req, res) => {
     console.log('hello employees')
-    const sql = `SELECT * FROM tracker.employee`;
+    // const sql = `SELECT * FROM employee`;
+    const sql = `
+    SELECT employee.id, employee.first_name, employee.last_name, 
+    role.title, department.department_name, role.salary, employee.manager_id FROM ((employee 
+        INNER JOIN role ON employee.role_id = role.id) 
+        INNER JOIN department ON role.department_id = department.id)
+        ORDER BY employee.id ASC;
+    `
     db.query(sql, (err, result) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -19,9 +26,10 @@ router.get('/tracker/employee', (req, res) => {
     });
 });
 
-// Get list of employees by role
+
+// Get list of employees by role 
 router.get('/tracker/employee/role/:id', (req, res) => {
-    const sql = `SELECT * FROM tracker.employee WHERE role_id = ?`;
+    const sql = `SELECT * FROM employee LEFT JOIN tracker.employe = ?`;
     db.query(sql, req.params.id, (err, rows) => {
         console.log('sorted by role_id', req.params)
         if(err) {
@@ -37,7 +45,7 @@ router.get('/tracker/employee/role/:id', (req, res) => {
 
 // Get list of employees by manager
 router.get('/tracker/employee/manager/:id', (req, res) => {
-    const sql = `SELECT * FROM tracker.employee WHERE manager_id = ?`;
+    const sql = `SELECT * FROM employee WHERE manager_id = ?`;
     db.query(sql, req.params.id, (err, rows) => {
         console.log('sorted by manager_id', req.params)
         if(err) {
