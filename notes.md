@@ -1,11 +1,6 @@
 * got all tables created and able to select * from tables;
 * add to tables
 
-
-* error: having trouble parsing id - comparing integer to string
-    - "error": "Truncated incorrect DOUBLE value:
-
-
 GIVEN a command-line application that accepts user input
 WHEN I start the application
 THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
