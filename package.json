@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/banderson19/employee-tracker#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "inquirer": "^8.0.0",
     "mysql2": "^2.2.5"

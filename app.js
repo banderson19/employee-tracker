@@ -1,4 +1,8 @@
 const inquirer = require('inquirer');
+const router = require('./routes/apiRoutes/employeeRoutes')
+const axios = require('axios')
+
+let employeeList = [];
 
 
 const init = () => {
@@ -26,16 +30,19 @@ const init = () => {
             console.log('view all employees')
         } else if (response.application == 'add a department') {
             console.log('add a department')
+            addDepartment();
         } else if (response.application == 'add a role') {
             console.log('add a role')
+            addRole();
         } else if (response.application == 'add an employee') {
+            console.log('add employee')
             addEmployee();
         } else {
             console.log('update an employee role')
+            updateEmployeeRole();
         };
     })
 }
-
 const addEmployee = () => {
     return inquirer.prompt([
         {
@@ -61,6 +68,61 @@ const addEmployee = () => {
             ]
         }
     ])
+}
+
+const addRole = () => {
+    return inquirer.prompt([
+        {
+            type: 'input', 
+            name: 'title',
+            message: 'What is the roles title?'
+        },{
+            type: 'input', 
+            name: 'salary', 
+            message: 'What is the salary for this position?'
+        }, {
+            type: 'list',
+            name: 'department', 
+            message: 'What department does this role belong to?',
+            choices: [
+                'Sales', 'Engineering', 'Finance', 'Legal'
+            ]
+        }
+    ])
+}
+
+const addDepartment = () => {
+    return inquirer.prompt([
+        {
+            type: 'input', 
+            name: 'title',
+            message: 'What is the Department title?'
+        }
+    ])
+}
+
+const updateEmployeeRole = async () => {
+    await getEmployeeDB()
+    let arr = await employeeList[0].map(e => `${e.first_name} ${e.last_name}`)
+    console.log(arr)
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'employee',
+            message: 'Which employee would you like to update their role?',
+            choices: arr
+        }
+        //put or post
+    ]).then( () => {})
+}
+//axios call or fetch
+const getEmployeeDB = async () => {
+    console.log('hello')
+    await axios.get('http://localhost:3009/api/tracker/employee')
+    .then(response => {
+        employeeList.push(response.data.data)
+
+    })
 }
     
 init();
