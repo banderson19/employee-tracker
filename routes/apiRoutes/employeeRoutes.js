@@ -26,10 +26,25 @@ router.get('/tracker/employee', (req, res) => {
     });
 });
 
+// Get employee by id
+router.get('/tracker/employee/:id', (req, res) => {
+    const sql = `SELECT * FROM employee WHERE id = ?`;
+    db.query(sql, req.params.id, (err, rows) => {
+        console.log('employee by id', req.params)
+        if(err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: rows
+        })
+    })
+})
 
 // Get list of employees by role 
 router.get('/tracker/employee/role/:id', (req, res) => {
-    const sql = `SELECT * FROM employee LEFT JOIN tracker.employe = ?`;
+    const sql = `SELECT * FROM employee LEFT JOIN tracker.employee = ?`;
     db.query(sql, req.params.id, (err, rows) => {
         console.log('sorted by role_id', req.params)
         if(err) {
@@ -61,6 +76,7 @@ router.get('/tracker/employee/manager/:id', (req, res) => {
 
 // Create an employee
 router.post('/tracker/employee', ({ body }, res) => {
+    console.log(body)
     const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
     const params = [body.first_name, body.last_name, body.role_id, body.manager_id];
     
@@ -70,6 +86,7 @@ router.post('/tracker/employee', ({ body }, res) => {
             res.status(400).json({ error: err.message });
             return;
         }
+        console.log('this was a success', body)
         res.json({
             message: 'success',
             data: body

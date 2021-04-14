@@ -4,7 +4,7 @@ const apiRoutes = require('./routes/apiRoutes/index.js');
 
 
 
-const PORT = process.env.PORT || 3009;
+const PORT = process.env.PORT || 3001;
 const app = express();
 // const inputCheck = require('./utils/inputCheck');
 

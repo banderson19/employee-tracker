@@ -17,6 +17,24 @@ router.get('/tracker/department', (req, res) => {
         });
     });
 });
+router.post('/tracker/department', ({ body }, res) => {
+    console.log(body)
+    const sql = `INSERT INTO department (department_name) VALUES (?)`;
+    const params = [body.department_name ];
+    
+    db.query(sql, params, (err, result) => {
+        console.log('created new department', body);
+        if(err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        console.log('this was a success', body)
+        res.json({
+            message: 'success',
+            data: body
+        });
+    });
+});
 
 
 module.exports = router;

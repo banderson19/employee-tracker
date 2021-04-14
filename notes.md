@@ -1,6 +1,12 @@
 * got all tables created and able to select * from tables;
 * add to tables
 
+
+axios calls arent working for post or put
+
+* run multiple start scripts
+  "dev": "concurrently --kill-others \"node server.js\" \"node app.js\""
+
 ** need to fix sort by role to by department
 * select all columns where department id = 2;
 SELECT * FROM ((employee INNER JOIN role ON employee.role_id = role.id) INNER JOIN department ON role.department_id = department.id) WHERE department.id = 2;

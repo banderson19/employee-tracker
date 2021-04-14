@@ -18,4 +18,23 @@ router.get('/tracker/role', (req, res) => {
     })
 })
 
+router.post('/tracker/role', ({ body }, res) => {
+    console.log(body)
+    const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
+    const params = [body.title, body.salary, body.department_id];
+    
+    db.query(sql, params, (err, result) => {
+        console.log('created new role', params);
+        if(err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        console.log('this was a success', body)
+        res.json({
+            message: 'success',
+            data: body
+        });
+    });
+});
+
 module.exports = router;
