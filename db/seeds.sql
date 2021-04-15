@@ -69,3 +69,21 @@
 -- |  8 | Tom        | Allen     | Accountant      | Finance         |  70000 |       NULL |
 -- |  9 | Christian  | Eckenrode | Lead Engineer   | Engineering     | 110000 |       NULL |
 -- +----+------------+-----------+-----------------+-----------------+--------+------------+
+
+-- mysql> SELECT * FROM employee LEFT JOIN tracker.role ON employee.role_id = role.id;
+-- +----+------------+-----------+---------+------------+------+-------------------+--------+---------------+
+-- | id | first_name | last_name | role_id | manager_id | id   | title             | salary | department_id |
+-- +----+------------+-----------+---------+------------+------+-------------------+--------+---------------+
+-- | 64 | Jake       | Kelly     |       4 |       NULL |    4 | Software Engineer |  65000 |             2 |
+-- | 65 | brian      | anderson  |    NULL |       NULL | NULL | NULL              |   NULL |          NULL |
+-- | 66 | sarah      | anderson  |    NULL |       NULL | NULL | NULL              |   NULL |          NULL |
+-- | 67 | steve      | anderson  |    NULL |       NULL | NULL | NULL              |   NULL |          NULL |
+-- | 68 | karen      | anderon   |    NULL |       NULL | NULL | NULL              |   NULL |          NULL |
+-- | 69 | Jake       | Kelly     |       4 |       NULL |    4 | Software Engineer |  65000 |             2 |
+-- | 70 | Sam        | Brigham   |    NULL |       NULL | NULL | NULL              |   NULL |          NULL |
+-- | 71 | Josh       | Johnson   |       6 |       NULL |    6 | Legal Team Lead   | 150000 |             4 |
+-- | 72 | Meredith   | uhoh      |    NULL |       NULL | NULL | NULL              |   NULL |          NULL |
+-- | 73 | kj         | peterson  |       3 |       NULL |    3 | Lead Engineer     | 110000 |             2 |
+-- | 74 | dwight     | schrute   |       1 |       NULL |    1 | Sales Lead        | 100000 |             1 |
+-- +----+------------+-----------+---------+------------+------+-------------------+--------+---------------+
+-- 11 rows in set (0.01 sec)

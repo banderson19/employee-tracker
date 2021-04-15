@@ -2,6 +2,18 @@
 * add to tables
 
 
+## 1 update http request not updating role on current employee. 
+
+## 2 add employ does re-render the new data! also returns 'undefined'
+
+## 3 update does not re render inquire prompt, sending incorrect role id
+
+# get request returning undefined
+
+
+
+
+
 axios calls arent working for post or put
 deletes employee at update role
 

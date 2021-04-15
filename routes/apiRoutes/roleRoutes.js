@@ -4,15 +4,31 @@ const db = require('../../db/connection');
 // const inputCheck = require('../../utils/inputCheck');
 
 //Get list of all roles
-router.get('/tracker/role', (req, res) => {
-    const sql = `SELECT * FROM tracker.role`;
+// router.get('/tracker/role', (req, res) => {
+//     const sql = `SELECT * FROM tracker.role`;
+//     db.query(sql, (err, rows) => {
+//         if(err) {
+//             res.status(500).json({ error: err.message });
+//             return;
+//         }
+//         res.json({
+//             message: 'success', 
+//             data: rows
+//         })
+//     })
+// })
+
+// Get list of employees by role  # 2
+router.get('/tracker/employee/role', (req, res) => {
+    const sql = `SELECT * FROM employee LEFT JOIN tracker.role ON employee.role_id = role.id;`;
     db.query(sql, (err, rows) => {
+        // console.log('sorted by role_id', req.params)
         if(err) {
             res.status(500).json({ error: err.message });
             return;
         }
         res.json({
-            message: 'success', 
+            message: 'success',
             data: rows
         })
     })
