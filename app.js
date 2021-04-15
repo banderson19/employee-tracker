@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const router = require('./routes/apiRoutes/employeeRoutes')
 const axios = require('axios')
 
+
 const init = () => {
     return inquirer.prompt([
         {
@@ -167,7 +168,7 @@ const updateEmployeeRole = async () => {
         return body
     }).then(data => {
         console.log('data', data)
-        axios.put(`http://localhost:3001/api/tracker/employee/role/:id`, data)
+        axios.put(`http://localhost:3001/api/tracker/employee/role/${data.id}`, data)
     })
 }
 

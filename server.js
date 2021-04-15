@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('./db/connection');
 const apiRoutes = require('./routes/apiRoutes/index.js');
-
+const logger = require('morgan')
 
 
 const PORT = process.env.PORT || 3001;
@@ -11,6 +11,8 @@ const app = express();
 // Express middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use(logger('dev'))
 
 // Use apiRoutes
 app.use('/api', apiRoutes);

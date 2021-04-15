@@ -23,8 +23,7 @@
     "concurrently": "^6.0.2",
     "express": "^4.17.1",
     "inquirer": "^8.0.0",
+    "morgan": "^1.10.0",
     "mysql2": "^2.2.5"
   }
 }
-
-  
