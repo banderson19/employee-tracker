@@ -3,6 +3,7 @@
 
 
 axios calls arent working for post or put
+deletes employee at update role
 
 * run multiple start scripts
   "dev": "concurrently --kill-others \"node server.js\" \"node app.js\""

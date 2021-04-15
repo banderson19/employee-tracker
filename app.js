@@ -21,10 +21,10 @@ const init = () => {
     ]).then(response => {
         if (response.application == 'view all departments') {
             console.log('view all departments')
-            getDepartmentDB();
+            showDeparment();
         } else if (response.application == 'view all roles') {
             console.log('view all roles')
-            getRoleDB();
+            showRole();
         } else if (response.application == 'view all employees') {
             console.log('view all employees')
             getEmployees();
@@ -46,7 +46,7 @@ const init = () => {
 const addEmployee =  async () => {
     await getRoleDB()
     let arr = await roleList[0].map(e => `${e.id} ${e.title} ${e.salary} ${e.department_id}`)
-    return inquirer.prompt([
+    inquirer.prompt([
         {
             type: 'input',
             name: 'first_name',
@@ -62,28 +62,26 @@ const addEmployee =  async () => {
             choices: arr
         }
     ]).then(info => {
-        console.log(info)
         var split = info.role.split(" ")
         let id = +split[0];
         const body = {
             first_name: info.first_name, 
             last_name: info.last_name, 
-            role: id
+            role_id: id,
+            manager_id: null
         }
-        console.log('boby', body)
         return body
     }).then(body => {
-        console.log(body)
+        console.log('body', body)
         axios.post('http://localhost:3001/api/tracker/employee', body)
-        init();
+        return init();
     })
-    
 }
 
 const addRole = async () => {
     await getDepartmentDB()
     let arr = await departmentList[0].map(e => `${e.id} ${e.department_name}`)
-    return inquirer.prompt([
+    inquirer.prompt([
         {
             type: 'input', 
             name: 'title',
@@ -112,7 +110,7 @@ const addRole = async () => {
     }).then(body => {
         console.log(body)
         axios.post('http://localhost:3001/api/tracker/role', body)
-        init();
+        return init();
     })
 }
 
@@ -136,49 +134,65 @@ const addDepartment = async () => {
 
 //
 
-// update employee list
+// update employee role
 let employeeList = [];
 const updateEmployeeRole = async () => {
     await getEmployeeDB()
     let arr = await employeeList[0].map(e => `${e.id} ${e.first_name} ${e.last_name} `)
-    console.log(arr)
+    await getRoleDB()
+    let roleArr = await roleList[0].map(e => `${e.id} ${e.title}`)
     inquirer.prompt([
         {
             type: 'list',
             name: 'employee',
             message: 'Which employee would you like to update their role?',
             choices: arr
+        },{
+            type: 'list',
+            name: 'role',
+            message: 'What role would you like them to have',
+            choices: roleArr
         }
         //put or post
     ]).then(data => {
         console.log(data)
-        var split = data.employee.split(" ")
-        let id = split[0];
-        console.log(id)
-        getEmployeeDB()
-
+        var idSplit = data.employee.split(" ")
+        var roleSplit = data.role.split(" ")
+        let id = +idSplit[0]
+        let role = +roleSplit[0]
+        const body = {
+            id: id,
+            role: role
+        }
+        return body
+    }).then(data => {
+        console.log('data', data)
+        axios.put(`http://localhost:3001/api/tracker/employee/role/:id`, data)
     })
 }
-
-const getEmployees = async () => {
-    await getEmployeeDB()
-    let arr = await employeeList[0].map(e => `${e.id} ${e.first_name} ${e.last_name} ${e.title} ${e.department_name}`)
-    console.log(arr)
-    init();
-}
-
-//axios calls
 
 // update employee by id
 const updateEmployeeDB = async () => {
     await axios.put('http://localhost:3001/api/tracker/employee/role/:id')
 }
+
+const getEmployees = async () => {
+    await getEmployeeDB()
+    let arr = await employeeList[0].map(e => `${e.id} ${e.first_name} ${e.last_name} ${e.title} ${e.department_name}`)
+    console.log('arr', arr)
+    init();
+    
+}
+
+//axios calls
 // employee DB
 const getEmployeeDB = async () => {
         await axios.get('http://localhost:3001/api/tracker/employee')
         .then(response => {
+            console.log('response', response.data)
             employeeList.push(response.data.data)
             console.log('getEmployeeDB hits')
+            return employeeList
         })
 }
 
@@ -192,6 +206,14 @@ const getDepartmentDB = async () => {
     })
 }
 
+//show departmentDB
+const showDeparment = async () => {
+    await getDepartmentDB();
+    let arr = await departmentList[0].map(e => `${e.id} ${e.department_name}`)
+    console.log(arr)
+    init();
+}
+
 // role DB
 let roleList = [];
 const getRoleDB = async () => {
@@ -202,22 +224,14 @@ const getRoleDB = async () => {
     })
 }
 
-    
+// show roleDB
+const showRole = async () => {
+    await getRoleDB();
+    let arr = await roleList[0].map(e => `${e.id} ${e.title} ${e.salary} ${e.department_id}`)
+    console.log(arr)
+    init();
+}
+
 init();
-// GIVEN a command-line application that accepts user input
-// WHEN I start the application
-// THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
-// WHEN I choose to view all departments
-// THEN I am presented with a formatted table showing department names and department ids
-// WHEN I choose to view all roles
-// THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
-// WHEN I choose to view all employees
-// THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
-// WHEN I choose to add a department
-// THEN I am prompted to enter the name of the department and that department is added to the database
-// WHEN I choose to add a role
-// THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
-// WHEN I choose to add an employee
-// THEN I am prompted to enter the employee’s first name, last name, role, and manager and that employee is added to the database
-// WHEN I choose to update an employee role
-// THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
+
+
