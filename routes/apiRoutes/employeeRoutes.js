@@ -7,14 +7,14 @@ const db = require('../../db/connection');
 router.get('/tracker/employee', (req, res) => {
     console.log('hello employees')
     // const sql = `SELECT * FROM employee`;
-    const sql = `
-        SELECT * FROM employee;
-    `
+    const sql = `SELECT * FROM employee LEFT JOIN tracker.role ON employee.role_id = role.id;`
+    
     db.query(sql, (err, result) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
         }
+        console.log('get employees success')
         res.json({
             message: 'success',
             data: result
@@ -38,6 +38,8 @@ router.get('/tracker/employee', (req, res) => {
 //     })
 // })
 
+// ## Check commented out of duplicated methods on single
+
 // Get list of employees by role 
 // router.get('/tracker/employee/role/:id', (req, res) => {
 //     const sql = `SELECT * FROM employee LEFT JOIN tracker.employee = ?`;
@@ -55,20 +57,20 @@ router.get('/tracker/employee', (req, res) => {
 // })
 
 // Get list of employees by manager
-router.get('/tracker/employee/manager/:id', (req, res) => {
-    const sql = `SELECT * FROM employee WHERE manager_id = ?`;
-    db.query(sql, req.params.id, (err, rows) => {
-        console.log('sorted by manager_id', req.params)
-        if(err) {
-            res.status(500).json({ error: err.message });
-            return;
-        } 
-        res.json({
-            message: 'success id values',
-            data: rows
-        })
-    })
-})
+// router.get('/tracker/employee/manager/:id', (req, res) => {
+//     const sql = `SELECT * FROM employee WHERE manager_id = ?`;
+//     db.query(sql, req.params.id, (err, rows) => {
+//         console.log('sorted by manager_id', req.params)
+//         if(err) {
+//             res.status(500).json({ error: err.message });
+//             return;
+//         } 
+//         res.json({
+//             message: 'success id values',
+//             data: rows
+//         })
+//     })
+// })
 
 // Create an employee
 router.post('/tracker/employee', ({ body }, res) => {
@@ -117,28 +119,28 @@ router.put('/tracker/employee/role/:id', (req, res) => {
 });
 
 // Update employees manager
-router.put('/tracker/employee/manager/:id', (req, res) => {
-    console.log("Employees manager updated", req.body);
+// router.put('/tracker/employee/manager/:id', (req, res) => {
+//     console.log("Employees manager updated", req.body);
 
-    const sql = `UPDATE employee SET manager_id = ? WHERE id = ?`;
-    const params = [req.body.manager_id, req.params.id];
+//     const sql = `UPDATE employee SET manager_id = ? WHERE id = ?`;
+//     const params = [req.body.manager_id, req.params.id];
 
-    db.query(sql, params, (err, result) => {
-        if (err) {
-            res.status(400).json({ error: err.message });
-        } else if (!result.affectedRows) {
-            res.json({
-                message: 'Employee not found'
-            });
-        } else {
-            res.json({
-                message: 'success',
-                data: req.body,
-                changes: result.affectedRows
-            });
-        }
-    });
-});
+//     db.query(sql, params, (err, result) => {
+//         if (err) {
+//             res.status(400).json({ error: err.message });
+//         } else if (!result.affectedRows) {
+//             res.json({
+//                 message: 'Employee not found'
+//             });
+//         } else {
+//             res.json({
+//                 message: 'success',
+//                 data: req.body,
+//                 changes: result.affectedRows
+//             });
+//         }
+//     });
+// });
 
 // Delete employee
 // no semicolon in localhost url

@@ -19,14 +19,15 @@ const db = require('../../db/connection');
 // })
 
 // Get list of employees by role  # 2
-router.get('/tracker/employee/role', (req, res) => {
-    const sql = `SELECT * FROM employee LEFT JOIN tracker.role ON employee.role_id = role.id;`;
+router.get('/tracker/role', (req, res) => {
+    const sql = `SELECT * FROM role`;
     db.query(sql, (err, rows) => {
         // console.log('sorted by role_id', req.params)
         if(err) {
             res.status(500).json({ error: err.message });
             return;
         }
+        console.log('get roles successful')
         res.json({
             message: 'success',
             data: rows

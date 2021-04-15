@@ -10,6 +10,9 @@
 
 # get request returning undefined
 
+### Questions
+what does this mean: `Promise { <pending> }`
+
 
 
 
