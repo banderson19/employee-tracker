@@ -7,8 +7,8 @@ const db = require('../../db/connection');
 router.get('/tracker/employee', (req, res) => {
     console.log('hello employees')
     // const sql = `SELECT * FROM employee`;
-    const sql = `SELECT * FROM employee LEFT JOIN tracker.role ON employee.role_id = role.id;`
-    
+    // const sql = `SELECT employee.id, first_name, last_name, role_id, manager_id, role.title, role.salary, department.department_name FROM ((employee INNER JOIN tracker.role ON employee.role_id = role.id;`
+    const sql = `SELECT employee.id, first_name, last_name, role_id, manager_id, role.title, role.salary, department.department_name FROM (( employee INNER JOIN tracker.role ON employee.role_id = role.id) INNER JOIN department On role.department_id = department.id);`
     db.query(sql, (err, result) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -75,8 +75,8 @@ router.get('/tracker/employee', (req, res) => {
 // Create an employee
 router.post('/tracker/employee', ({ body }, res) => {
     console.log('server side', body)
-    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
-    const params = [body.first_name, body.last_name, body.role_id, body.manager_id];
+    const sql = `INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)`;
+    const params = [body.first_name, body.last_name, body.role_id];
     console.log(params)
     db.query(sql, params, (err, result) => {
         console.log('created new employee', body);

@@ -18,9 +18,9 @@ router.get('/tracker/department', (req, res) => {
     });
 });
 router.post('/tracker/department', ({ body }, res) => {
-    console.log(body)
+    console.log('444', body)
     const sql = `INSERT INTO department (department_name) VALUES (?)`;
-    const params = [body.department_name ];
+    const params = [body.title ];
     
     db.query(sql, params, (err, result) => {
         console.log('created new department', body);

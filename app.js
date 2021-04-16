@@ -45,12 +45,11 @@ const init = () => {
     })
 }
 const addEmployee =  async () => {
-    // await getEmployeeDB()
-    // console.log(' new employeeList', employeeList)
+    // await getEmployeeDB()  
     // let arr = await employeeList[0].map(e  => `${e.role_id} ${e.title} ${e.salary} `)
     
     await getRoleDB()
-    console.log('23232', roleList)
+    console.log('11', roleList[0])
     let arr = await roleList[0].map(e => `${e.id} ${e.title} ${e.salary} ${e.department_id}`)
     inquirer.prompt([
         {
@@ -69,28 +68,18 @@ const addEmployee =  async () => {
         }
     ]).then(data => {
         console.log('data: ', data)
-        axios.post('http://localhost:3001/api/tracker/employee', data)
+        let idSplit = data.role.split(" ")
+        let id = +idSplit[0];
+        const body = {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            role_id: id
+        }
+        console.log('body', body)
+        axios.post('http://localhost:3001/api/tracker/employee', body)
         init()
     })
 }
-
-    
-    // ]).then(info => { 
-    //     var split = info.role.split(" ")
-    //     let id = +split[0];
-    //     const body = {
-    //         first_name: info.first_name, 
-    //         last_name: info.last_name, 
-    //         role_id: id,
-    //         manager_id: null
-    //     }
-    //     return body
-    // })
-    // .then(body => {
-    //     console.log('body', body)
-    //     axios.post('http://localhost:3001/api/tracker/employee', body)
-    //     return init();
-    // }
 
 
 const addRole = async () => {
@@ -120,16 +109,14 @@ const addRole = async () => {
             salary: info.salary,
             id: id
         }
-        console.log('body', body)
-        return body
-    }).then(body => {
-        console.log(body)
+        console.log('role body', body)
+
         axios.post('http://localhost:3001/api/tracker/role', body)
-        return init();
+        init();
     })
 }
 
-const addDepartment = async () => {
+const addDepartment = () => {
     return inquirer.prompt([
         {
             type: 'input', 
@@ -138,10 +125,11 @@ const addDepartment = async () => {
         }
     ]).then(info => {
         console.log(info)
-        const body = info.title;
-        console.log('body', body)
-        return body
-    }).then(body => {
+        const body = {
+            title: info.title
+        };
+        console.log('department body', body)
+
         axios.post('http://localhost:3001/api/tracker/department', body)
         init()
     })
@@ -194,8 +182,8 @@ const updateEmployeeDB = async () => {
 let employeeList = []
 const getEmployees = async () => {
     await getEmployeeDB()
-    let arr = await employeeList[0].map(e => `${e.id} ${e.first_name} ${e.last_name} ${e.title} ${e.department_name}`)
-    console.log('getEmployee arr 3333', arr)
+    let arr = await employeeList[0].map(e => `${e.id} | ${e.first_name} |${e.last_name} |${e.title} | ${e.salary} | ${e.department_name}`)
+    console.log(arr)
     // return employeeList
     init();
 }
@@ -217,13 +205,12 @@ let roleList = [];
 const getRoleDB = async () => {
     await axios.get('http://localhost:3001/api/tracker/role')
     .then(response => {
-        console.log(response.data.data)
+        // console.log('response', response.data.data)
         roleList.push(response.data.data)
         console.log('get roleDB hit')
         roleList = roleList
         return roleList
     })
-    console.log('roleList', roleList)
 }
 
 // show roleDB
