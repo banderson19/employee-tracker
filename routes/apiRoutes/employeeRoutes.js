@@ -95,10 +95,10 @@ router.post('/tracker/employee', ({ body }, res) => {
 // Update an employees role
 // change role_id. look at mysql to see the role_id is not being updated correctly
 router.put('/tracker/employee/role/:id', (req, res) => {
-    console.log("Employee role updated", req.body, req.params.id);
+    console.log("Employee role updated", req.body);
     
     const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
-    const params = [req.body.role_id, req.params.id];
+    const params = [req.body.role, req.params.id]
     
     db.query(sql, params, (err, result) => {
         if (err) {

@@ -28,7 +28,7 @@ const init = () => {
             showRole();
         } else if (response.application == 'view all employees') {
             console.log('view all employees')
-            getEmployees();
+            showEmployees();
         } else if (response.application == 'add a department') {
             console.log('add a department')
             addDepartment();
@@ -135,60 +135,53 @@ const addDepartment = () => {
     })
 }
 
-//
-
 // update employee role
-// let employeeList = [];
-// const updateEmployeeRole = async () => {
-//     await getEmployeeDB()
-//     let arr = await employeeList[0].map(e => `${e.id} ${e.first_name} ${e.last_name} `)
-//     await getRoleDB()
-//     let roleArr = await roleList[0].map(e => `${e.id} ${e.title}`)
-//     inquirer.prompt([
-//         {
-//             type: 'list',
-//             name: 'employee',
-//             message: 'Which employee would you like to update their role?',
-//             choices: arr
-//         },{
-//             type: 'list',
-//             name: 'role',
-//             message: 'What role would you like them to have',
-//             choices: roleArr
-//         }
-//         //put or post
-//     ]).then(data => {
-//         console.log(data)
-//         var idSplit = data.employee.split(" ")
-//         var roleSplit = data.role.split(" ")
-//         let id = +idSplit[0]
-//         let role = +roleSplit[0]
-//         const body = {
-//             id: id,
-//             role: role
-//         }
-//         return body
-//     }).then(data => {
-//         console.log('data', data)
-//         axios.put(`http://localhost:3001/api/tracker/employee/role/${data.id}`, data)
-//     })
-// }
-
-// update employee by id
-const updateEmployeeDB = async () => {
-    await axios.put('http://localhost:3001/api/tracker/employee/role/:id')
+const updateEmployeeRole = async () => {
+    await getEmployeeDB()
+    let arr = await employeeList[0].map(e => `${e.id} ${e.first_name} ${e.last_name} `)
+    await getRoleDB()
+    let roleArr = await roleList[0].map(e => `${e.id} ${e.title}`)
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'employee',
+            message: 'Which employee would you like to update their role?',
+            choices: arr
+        },{
+            type: 'list',
+            name: 'role',
+            message: 'What role would you like them to have',
+            choices: roleArr
+        }
+        //put or post
+    ]).then(data => {
+        console.log('data', data)
+        var idSplit = data.employee.split(" ")
+        var roleSplit = data.role.split(" ")
+        let id = +idSplit[0]
+        let role = +roleSplit[0]
+        const body = {
+            id: id,
+            role: role
+        }
+        return body
+    }).then(body => {
+        console.log('Employees role has been updated', body)
+        axios.put(`http://localhost:3001/api/tracker/employee/role/${body.id}`, body)
+        init();
+    })
 }
 
+// get employeeDB
 let employeeList = []
-const getEmployees = async () => {
+const showEmployees = async () => {
     await getEmployeeDB()
     let arr = await employeeList[0].map(e => `${e.id} | ${e.first_name} |${e.last_name} |${e.title} | ${e.salary} | ${e.department_name}`)
     console.log(arr)
     // return employeeList
     init();
 }
-//axios calls
-// employee DB
+//axios call
 const getEmployeeDB = async () => {
         await axios.get('http://localhost:3001/api/tracker/employee')
         .then(response => {
@@ -202,6 +195,13 @@ const getEmployeeDB = async () => {
 }
 // role DB
 let roleList = [];
+const showRole = async () => {
+    await getRoleDB();
+    let arr = await roleList[0].map(e => `${e.id} ${e.title} ${e.salary} ${e.department_id}`)
+    console.log(arr)
+    init();
+}
+// axios call
 const getRoleDB = async () => {
     await axios.get('http://localhost:3001/api/tracker/role')
     .then(response => {
@@ -213,15 +213,14 @@ const getRoleDB = async () => {
     })
 }
 
-// show roleDB
-const showRole = async () => {
-    await getRoleDB();
-    let arr = await roleList[0].map(e => `${e.id} ${e.title} ${e.salary} ${e.department_id}`)
+//show departmentDB
+const showDeparment = async () => {
+    await getDepartmentDB();
+    let arr = await departmentList[0].map(e => `${e.id} ${e.department_name}`)
     console.log(arr)
     init();
 }
-
-// department DB
+// axios call
 let departmentList = [];
 const getDepartmentDB = async () => {
     await axios.get('http://localhost:3001/api/tracker/department')
@@ -230,16 +229,6 @@ const getDepartmentDB = async () => {
         console.log('get depatmentDB hit')
     })
 }
-
-//show departmentDB
-const showDeparment = async () => {
-    await getDepartmentDB();
-    let arr = await departmentList[0].map(e => `${e.id} ${e.department_name}`)
-    console.log(arr)
-    init();
-}
-
-
 
 init();
 
