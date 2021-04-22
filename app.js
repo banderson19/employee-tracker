@@ -1,7 +1,9 @@
 const inquirer = require('inquirer');
 const router = require('./routes/apiRoutes/employeeRoutes')
 const axios = require('axios')
-
+let departmentList = [];
+let employeeList = [];
+let roleList = [];
 
 const init = () => {
     return inquirer.prompt([
@@ -49,7 +51,7 @@ const addEmployee =  async () => {
     // let arr = await employeeList[0].map(e  => `${e.role_id} ${e.title} ${e.salary} `)
     
     await getRoleDB()
-    console.log('11', roleList[0])
+    console.log('111', roleArray)
     let arr = await roleList[0].map(e => `${e.id} ${e.title} ${e.salary} ${e.department_id}`)
     inquirer.prompt([
         {
@@ -103,6 +105,7 @@ const addRole = async () => {
     ]).then(info => {
         console.log(info)
         var split = info.department.split(" ")
+
         let id = +split[0];
         const body = {
             title: info.title,
@@ -173,7 +176,6 @@ const updateEmployeeRole = async () => {
 }
 
 // get employeeDB
-let employeeList = []
 const showEmployees = async () => {
     await getEmployeeDB()
     let arr = await employeeList[0].map(e => `${e.id} | ${e.first_name} |${e.last_name} |${e.title} | ${e.salary} | ${e.department_name}`)
@@ -186,15 +188,14 @@ const getEmployeeDB = async () => {
         await axios.get('http://localhost:3001/api/tracker/employee')
         .then(response => {
             // console.log('response', response.data)
+            employeeList = []
             employeeList.push(response.data.data)
             // console.log('getEmployeeDB hits')
-            employeeList = employeeList
             return employeeList
         })
         // console.log('2222', employeeList)
 }
 // role DB
-let roleList = [];
 const showRole = async () => {
     await getRoleDB();
     let arr = await roleList[0].map(e => `${e.id} ${e.title} ${e.salary} ${e.department_id}`)
@@ -202,13 +203,14 @@ const showRole = async () => {
     init();
 }
 // axios call
+
 const getRoleDB = async () => {
     await axios.get('http://localhost:3001/api/tracker/role')
     .then(response => {
+        roleList = [];
         // console.log('response', response.data.data)
         roleList.push(response.data.data)
         console.log('get roleDB hit')
-        roleList = roleList
         return roleList
     })
 }
@@ -221,10 +223,11 @@ const showDeparment = async () => {
     init();
 }
 // axios call
-let departmentList = [];
+
 const getDepartmentDB = async () => {
     await axios.get('http://localhost:3001/api/tracker/department')
     .then(response => {
+        departmentList = [];
         departmentList.push(response.data.data)
         console.log('get depatmentDB hit')
     })
