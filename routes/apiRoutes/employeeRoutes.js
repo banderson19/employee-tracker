@@ -115,6 +115,7 @@ router.put('/tracker/employee/role/:id', (req, res) => {
                 changes: result.affectedRows
             });
         }
+        
     });
 });
 

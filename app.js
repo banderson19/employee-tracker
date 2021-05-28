@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const router = require('./routes/apiRoutes/employeeRoutes')
 const axios = require('axios')
+const cTable = require('console.table');
 let departmentList = [];
 let employeeList = [];
 let roleList = [];
@@ -51,7 +52,7 @@ const addEmployee =  async () => {
     // let arr = await employeeList[0].map(e  => `${e.role_id} ${e.title} ${e.salary} `)
     
     await getRoleDB()
-    console.log('111', roleArray)
+    // console.log('111', roleArray)
     let arr = await roleList[0].map(e => `${e.id} ${e.title} ${e.salary} ${e.department_id}`)
     inquirer.prompt([
         {
@@ -69,7 +70,7 @@ const addEmployee =  async () => {
             choices: arr
         }
     ]).then(data => {
-        console.log('data: ', data)
+        // console.log('data: ', data)
         let idSplit = data.role.split(" ")
         let id = +idSplit[0];
         const body = {
@@ -77,8 +78,9 @@ const addEmployee =  async () => {
             last_name: data.last_name,
             role_id: id
         }
-        console.log('body', body)
+        // console.log('body', body)
         axios.post('http://localhost:3001/api/tracker/employee', body)
+        console.log('Employee added successfully')
         init()
     })
 }
@@ -103,7 +105,7 @@ const addRole = async () => {
             choices: arr
         }
     ]).then(info => {
-        console.log(info)
+        // console.log(info)
         var split = info.department.split(" ")
 
         let id = +split[0];
@@ -112,7 +114,7 @@ const addRole = async () => {
             salary: info.salary,
             id: id
         }
-        console.log('role body', body)
+        // console.log('role body', body)
 
         axios.post('http://localhost:3001/api/tracker/role', body)
         init();
@@ -158,7 +160,7 @@ const updateEmployeeRole = async () => {
         }
         //put or post
     ]).then(data => {
-        console.log('data', data)
+        // console.log('data', data)
         var idSplit = data.employee.split(" ")
         var roleSplit = data.role.split(" ")
         let id = +idSplit[0]
@@ -179,7 +181,8 @@ const updateEmployeeRole = async () => {
 const showEmployees = async () => {
     await getEmployeeDB()
     let arr = await employeeList[0].map(e => `${e.id} | ${e.first_name} |${e.last_name} |${e.title} | ${e.salary} | ${e.department_name}`)
-    console.log(arr)
+    // console.log(arr)
+    console.table(employeeList[0])
     // return employeeList
     init();
 }
@@ -199,7 +202,8 @@ const getEmployeeDB = async () => {
 const showRole = async () => {
     await getRoleDB();
     let arr = await roleList[0].map(e => `${e.id} ${e.title} ${e.salary} ${e.department_id}`)
-    console.log(arr)
+    // console.log(arr)
+    console.table(roleList[0])
     init();
 }
 // axios call
@@ -210,7 +214,7 @@ const getRoleDB = async () => {
         roleList = [];
         // console.log('response', response.data.data)
         roleList.push(response.data.data)
-        console.log('get roleDB hit')
+        // console.log('get roleDB hit')
         return roleList
     })
 }
@@ -219,7 +223,8 @@ const getRoleDB = async () => {
 const showDeparment = async () => {
     await getDepartmentDB();
     let arr = await departmentList[0].map(e => `${e.id} ${e.department_name}`)
-    console.log(arr)
+    // console.log(arr)
+    console.table(departmentList[0])
     init();
 }
 // axios call
@@ -229,7 +234,7 @@ const getDepartmentDB = async () => {
     .then(response => {
         departmentList = [];
         departmentList.push(response.data.data)
-        console.log('get depatmentDB hit')
+        // console.log('get depatmentDB hit')
     })
 }
 
